@@ -10,7 +10,11 @@ try:
     with open("datos_seguimiento.txt","r") as archivo:
         for linea in archivo:
             partes = linea.strip().split(",")
-            seguimiento.append((partes[0],float(partes[1]),int(partes[2]),float(partes[3]),partes[4]))
+            if len(partes) == 5:
+                try:
+                    seguimiento.append((partes[0],float(partes[1]),int(partes[2]),float(partes[3]),partes[4]))
+                except ValueError:
+                    print(f"dato '{linea.strip()}' ingreaso incorrectamente no se tomara en cuenta ")
 except FileNotFoundError:
     seguimiento = []
 
@@ -32,16 +36,16 @@ usuario = (nombre,edad,id)
 # opcion de salir
 
 while True:
-    print("\nMENU: \n 1: Registrar dia y Habito \n 2: Ver Historial \n 3: Calcular promedio semanal \n 4: mostrar porcentaje de cumplimiento por habito \n 5: Salir ")
+    print("\nMENU: \n 1: Registrar dia y Habito \n 2: Ver Historial \n 3: Calcular promedio semanal \n 4: mostrar porcentaje de cumplimiento por habito \n 5: modificar dia ya registrado \n 6: salir ")
     
     # creo una variable donde le digo al usuario que escoja una opcion
     # tambien comienzo las condiciones 
     
-    opcion = input("ingrease una opcion 1-5: ")
+    opcion = input("ingrease una opcion 1-6: ")
     
     # si el usuario escoje la opcion 5 es decir la de salir simplemete le aparecera un mensaje que salio del programa y se termina con un break
     
-    if opcion == "5":
+    if opcion == "6":
         print("ha salido del programa ")
         break
     
@@ -55,9 +59,9 @@ while True:
    # luego solicito los dato al usuario como el agua consumida,  los minutos de ejercicio, las horas de sueño y si se alimento bien
       
         else:
-            a = input("-litros de agua consumido: ")
-            e = input("-minutos de ejercicio: ")
-            s = input("-horas de sueño: ")
+            a = input("-litros de agua consumido(eje: 2.5): ")
+            e = input("-minutos de ejercicio(eje: 30): ")
+            s = input("-horas de sueño(eje: 9.5): ")
             c = input("-alimentacion saludable? (si/no): ").lower()
             error = False
    
@@ -95,7 +99,7 @@ while True:
     # creo una variable que toma los valores que conto la variable "i" y que muestra cada elemento de la lista #que el usuario ingreso luego muestro el historial en un print
    
             reg = seguimiento[i]
-            print(f"{reg[0]},\n-agua= {(reg[1])},\n-ejercicio= {(reg[2])} \n-minutos sueño= {(reg[3])},\n-alimentacion saludable= {(reg[4])}")
+            print(f"{reg[0]},\n-agua= {(reg[1]):.2f},\n-ejercicio= {(reg[2]):.2f} \n-horas de sueño= {(reg[3]):.2f},\n-alimentacion saludable= {(reg[4])}")
             i += 1
     elif opcion == "3":
 
@@ -122,9 +126,9 @@ while True:
                
                 dias = len(seguimiento)
             print("\n----promedio semanal----")
-            print(f"agua: {total_agua / dias:2f} litros")
-            print(f"ejercicio: {total_ejercicio / dias:2f} Minutos")
-            print(f"sueño: {total_sueño / dias:2f} Horas")
+            print(f"agua: {total_agua / dias:.2f} litros")
+            print(f"ejercicio: {total_ejercicio / dias:.2f} Minutos")
+            print(f"sueño: {total_sueño / dias:.2f} Horas")
     elif opcion == "4":
    
     # hago lo mismo que antes creo un if que cuenta los elemento de la lista y si la lista esta vacia entonces muestro un mensaje que dice que no hay registro y por lo tanto no se puede calcular
@@ -154,10 +158,10 @@ while True:
                 
                 dias = len(seguimiento)
             print("\n----promedio de cumplimiento----")
-            print(f"-agua: {(cumplir_agua/dias)*100}%")
-            print(f"-ejercicio: {(cumplir_ejercicio/dias)*100}%")
-            print(f"-sueño: {(cumplir_sueño/dias)*100}%")
-            print(f"-alimentacion: {(cumplir_alimentacion/dias)*100}%")
+            print(f"-agua: {(cumplir_agua/dias)*100:.2f}%")
+            print(f"-ejercicio: {(cumplir_ejercicio/dias)*100:.2f}%")
+            print(f"-sueño: {(cumplir_sueño/dias)*100:.2f}%")
+            print(f"-alimentacion: {(cumplir_alimentacion/dias)*100:.2f}%")
     
     #luego creo un diccionario que reune los datos de cumplimiento y creo una  variable el cual busca el que tenga menor datos y le muestra un consejo al usuario para que mejore el habito que menos practico
 
@@ -169,3 +173,78 @@ while True:
             }
             menor=min(porcentaje, key=porcentaje.get)
             print(f"\nDeberias mejoras tu habito de: {menor} ya que lo practicas menos")
+
+    #si el usuario quiere modificar un dia que ya ingreso entonces el programa le va a pedir que ingrese el dia  en la lista de seguimiento no hay nada guardado todavia entonces se le muestra un mensaje que dice que no hay registro para cambiar
+   
+    elif opcion == "5":
+        print("\n--- MODIFICAR DÍA REGISTRADO ---")
+        if not seguimiento:
+            print("No hay días registrados para modificar.")
+  
+    # si lo anterior no ocurre se le pide al usuario que ingrese el dia que quiere modificar         
+        
+        else:
+            dia_a_modificar = input("Ingrese el día de la semana que desea modificar (ej. lunes): ").lower()
+            
+   
+    # creo una variable con el valor -1 que indica que no se a encontrado el dia en la lista de seguimiebto luego inicio un bucle for que recorre la lista de seguimiento buscando el dia que el usuario ingreso
+            
+            indice_dia = -1 
+            for i, reg in enumerate(seguimiento): 
+                if reg[0] == dia_a_modificar:
+                    indice_dia = i
+                    break
+    
+    # en este if se compara el -1 con la variable que tiene el dai que ingreso el usuario, si estos son iguales entonces el dia que ingreso el usuario no esta registrado aun y se le muestra un mensaje al usuario diciendole
+           
+            if indice_dia == -1:
+                print(f"El día '{dia_a_modificar}' no se encontró en el historial.")
+    
+    # pero si el dia ya esta lo que hara el programa es mostrarle al usuario los datos que tiene guardado con ese dia y se le pedira que ingrese los nuevos datos            
+           
+            else:
+                print(f"\nDatos actuales para {dia_a_modificar.capitalize()}:")
+                current_reg = seguimiento[indice_dia]
+                print(f"  - Agua: {current_reg[1]:.2f} litros")
+                print(f"  - Ejercicio: {current_reg[2]} minutos")
+                print(f"  - Sueño: {current_reg[3]:.2f} horas")
+                print(f"  - Alimentación saludable: {current_reg[4].capitalize()}")
+
+                print("\nIngrese los nuevos valores:")
+                a_nuevo = input("- Nuevos litros de agua consumidos: ")
+                e_nuevo = input("- Nuevos minutos de ejercicio: ")
+                s_nuevo = input("- Nuevas horas de sueño: ")
+                c_nuevo = input("- ¿Nueva alimentación saludable? (si/no): ").lower()
+    
+    # aca lo que estoy haciendo es convertir los nuevos datos en float o int respectivamente tambien se revisa que los datos no sean negativo y que la opcion de alimentacion sea no o si, es igual a como se hizo anteriormente con los otros datos
+
+                try:
+                    
+                    agua_nueva = float(a_nuevo)
+                    ejercicio_nuevo = int(e_nuevo)
+                    sueño_nuevo = float(s_nuevo)
+
+                    if agua_nueva < 0 or ejercicio_nuevo < 0 or sueño_nuevo < 0:
+                        print("Error: Los valores deben ser positivos.")
+                    elif c_nuevo not in ["si", "no"]:
+                        print("Error: La opción de alimentación debe ser 'si' o 'no'.")
+                    else:
+   
+    # si todo es correcto se ingresa los nuevos datos en la lista de seguimiento y ya que la tuplas son inmutables se crea otra para los nuevos datos                    
+                       
+                        seguimiento[indice_dia] = (dia_a_modificar, agua_nueva, ejercicio_nuevo, sueño_nuevo, c_nuevo)
+                        try:
+                            with open("datos_seguimiento.txt", "w") as archivo:
+                                for dia_reg, agua_reg, ejercicio_reg, sueño_reg, alimentacion_reg in seguimiento:
+                                    archivo.write(f"{dia_reg},{agua_reg},{ejercicio_reg},{sueño_reg},{alimentacion_reg}\n")
+    
+    # si todo paso correctamente se le dice al usuario que se guardo exitosamente pero si pasa algun error entoces se le dice al usuario que no se pudo actualizar el dia
+                           
+                            print(f"¡Día '{dia_a_modificar.capitalize()}' modificado exitosamente y guardado!")
+                        except IOError:
+                            print(" No se pudo guardar la información modificada en el archivo.")
+    
+    # aca se muestra un  mensaje por si el usuario ingreso mal los datos de los habitos
+               
+                except ValueError:
+                    print("\nError: Datos incorrectos. Ingrese números válidos para agua, ejercicio y sueño.")
