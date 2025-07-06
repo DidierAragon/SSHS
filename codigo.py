@@ -2,6 +2,20 @@
 # lo primero que va aparecer sera un mensaje que le da la bienvenidad a la pagina
 # creo tres variables donde le pido al usuario el nombre la edad y el numero de identificacion
 
+seguimiento = []
+
+# este try intenta abrir el archivo "datos_seguimiento.txt" en modo lectura el bucle for elimina los espacios al inicio y al fina y divide la linea en partes usando la coma como delimiador para luego crear una variable el cual agrega todos los habitos del usuario y guardandolos
+
+try:
+    with open("datos_seguimiento.txt","r") as archivo:
+        for linea in archivo:
+            partes = linea.strip().split(",")
+            seguimiento.append((partes[0],float(partes[1]),int(partes[2]),float(partes[3]),partes[4]))
+except FileNotFoundError:
+    seguimiento = []
+
+
+
 nombre = input("ingrese su nombre completo: ")
 
 edad = int(input("ingrse su edad: "))
@@ -13,7 +27,6 @@ id = int(input("ingrese su numero de identificacion: "))
 
 usuario = (nombre,edad,id)
 
-seguimiento = []
 
 # muestro el menu con un while true para que siempre aparezca hasta que el usuario le de a la 
 # opcion de salir
@@ -35,21 +48,8 @@ while True:
     # si el usuario elije la opcion 1 le va apedir que ingrese el dia de la semana luego creo creo un contador para los dias de la semana dentro de la lista de seguimiento  
     
     elif opcion == "1":
-        dia = input("ingrese el dia de la semana: ")
-        i = 0
-    
-    # luego creo una variable que se llama dia duplicado para identificar si hay dias duplicado dentro de  la lista de seguimiento
-    
-        dia_duplicado = False
-    
-    # en este while verifica si el dia ya esta registrado luego accede al primer campo de nombre del dia en cada tupla 
-    
-        while i < len(seguimiento):
-            if seguimiento [i][0] == dia:
-                dia_duplicado = True
-                break
-            i += 1
-        if dia_duplicado:
+        dia = input("ingrese el dia de la semana: ").lower()
+        if dia in [registro[0]for registro in seguimiento]:
             print("----este dia ya esta registrado----")
    
    # luego solicito los dato al usuario como el agua consumida,  los minutos de ejercicio, las horas de sueño y si se alimento bien
@@ -167,5 +167,5 @@ while True:
                 "sueño" : cumplir_sueño,
                 "alimentacion" : cumplir_alimentacion
             }
-            menor=min(porcentaje)
+            menor=min(porcentaje, key=porcentaje.get)
             print(f"\nDeberias mejoras tu habito de: {menor} ya que lo practicas menos")
