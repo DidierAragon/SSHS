@@ -1,3 +1,0 @@
-lunes,4.0,30,9.0,si
-martes,4.0,60,10.0,si
-viernes,2.0,30,8.0,no
