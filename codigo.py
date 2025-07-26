@@ -22,7 +22,7 @@ except FileNotFoundError:
 
 nombre = input("ingrese su nombre completo: ")
 
-edad = int(input("ingrse su edad: "))
+edad = int(input("ingrese su edad: "))
 
 id = int(input("ingrese su numero de identificacion: "))
 
@@ -43,7 +43,7 @@ while True:
     
     opcion = input("ingrease una opcion 1-6: ")
     
-    # si el usuario escoje la opcion 5 es decir la de salir simplemete le aparecera un mensaje que salio del programa y se termina con un break
+    # si el usuario escoje la opcion 6 es decir la de salir simplemete le aparecera un mensaje que salio del programa y se termina con un break
     
     if opcion == "6":
         print("ha salido del programa ")
